@@ -115,7 +115,7 @@ class WeatherDetailState extends State<WeatherDetail> {
     }
 
     return new Container(
-      child: new Column(
+      child: new ListView(
         children: <Widget>[
           new Container(
             width: 500.0,
@@ -133,15 +133,23 @@ class WeatherDetailState extends State<WeatherDetail> {
             child: new Center(child: new Text(_aqi.toString(), textAlign:TextAlign.center, style: new TextStyle(fontSize: 60.0, fontWeight: FontWeight.w800, color: Colors.white))),
           ),
           new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               buildDetailItem('co'),
               buildDetailItem('no2'),
               buildDetailItem('o3'),
-              buildDetailItem('pm10'),
-              buildDetailItem('so2'),
-              buildDetailItem('pm2.5')
             ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 30.0),
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                buildDetailItem('pm10'),
+                buildDetailItem('so2'),
+                buildDetailItem('pm2.5')
+              ],
+            ),
           )
         ],
       )
