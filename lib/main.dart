@@ -49,9 +49,9 @@ class WeatherDetail extends StatefulWidget {
 }
 class WeatherDetailState extends State<WeatherDetail> {
   var _address = '定位中...';
-  int _aqi;
+  var _aqi = '--';
   var _time = '更新于';
-  var _detail;
+  var _detail = {};
 
   @override
   initState() {
@@ -62,7 +62,7 @@ class WeatherDetailState extends State<WeatherDetail> {
   _getLocationAqi() async {
     Position position;
     try {
-      position = await  Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+      position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
 
       var lat = position.latitude.toString();
       var lng = position.longitude.toString();
@@ -77,13 +77,12 @@ class WeatherDetailState extends State<WeatherDetail> {
             var data = body['data'];
             setState(() {
               _address = data['city']['name'];
-              _aqi = data['aqi'];
+              _aqi = data['aqi'].toString();
               _time += data['time']['s'];
               _detail = data['iaqi'];
             });
-          } else {
-            res = null;
           }
+          
         }
       }
     } on PlatformException {
@@ -97,8 +96,14 @@ class WeatherDetailState extends State<WeatherDetail> {
     TextStyle tStyle = new TextStyle(fontSize: 20.0, fontWeight:FontWeight.w500, color: color);
 
     Column buildDetailItem(String title) {
-      if (_detail[title.replaceAll('.', '')] is Map) {
-        var num = _detail[title.replaceAll('.', '')];
+      if (_detail is Map) {
+        var num = {};
+        if (_detail[title.replaceAll('.', '')] is Map) {
+          num = _detail[title.replaceAll('.', '')];
+        }
+        if (num['v'] == null) {
+          num['v'] = '--';
+        }
         return new Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
